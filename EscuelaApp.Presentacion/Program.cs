@@ -1,7 +1,15 @@
+using EscuelaApp.Persistencia.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Configurar la conexion string
+builder.Services.AddDbContext<SchoolDBContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolDb"))
+    );
 
 var app = builder.Build();
 
