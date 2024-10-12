@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EscuelaApp.Dominio.Interfaces;
+using EscuelaApp.Persistencia.Repositorios;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EscuelaApp.Persistencia
 {
-    internal class InyectarDependencias
+    public class InyectarDependencias
     {
+        public static void ConfiguracionServicios (IServiceCollection servicios) {
+            servicios.AddScoped<ICourses, RepositorioCourses>();
+        }
     }
 }

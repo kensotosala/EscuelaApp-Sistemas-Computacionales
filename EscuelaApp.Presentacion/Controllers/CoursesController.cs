@@ -1,41 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EscuelaApp.Dominio.Interfaces;
+using EscuelaApp.Persistencia.Data;
+using EscuelaApp.Persistencia.Repositorios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EscuelaApp.Persistencia.Data;
 
 namespace EscuelaApp.Presentacion.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly SchoolDBContext _context;
+        private readonly ICourses _repCourse;
 
-        public CoursesController(SchoolDBContext context)
+        public CoursesController(SchoolDBContext context, ICourses repCourse)
         {
             _context = context;
+            _repCourse = repCourse;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var schoolDBContext = _context.Courses.Include(c => c.Department);
-            return View(await schoolDBContext.ToListAsync());
+            return View(await _repCourse.obtenerTodo());
         }
 
         // GET: Courses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var course = await _repCourse.obtenerCursosxId(id);
 
-            var course = await _context.Courses
-                .Include(c => c.Department)
-                .FirstOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
                 return NotFound();
@@ -60,8 +53,7 @@ namespace EscuelaApp.Presentacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+                int res = await _repCourse.insertar(course);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
@@ -73,17 +65,21 @@ namespace EscuelaApp.Presentacion.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); // Handle case where id is null
             }
 
-            var course = await _context.Courses.FindAsync(id);
+            int courseID = (int)id;
+            var course = await _repCourse.obtenerCursosxId(courseID);
+
             if (course == null)
             {
-                return NotFound();
+                return NotFound(); // Handle case where course is not found
             }
+
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
+
 
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -101,8 +97,7 @@ namespace EscuelaApp.Presentacion.Controllers
             {
                 try
                 {
-                    _context.Update(course);
-                    await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
