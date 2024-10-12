@@ -97,7 +97,7 @@ namespace EscuelaApp.Presentacion.Controllers
             {
                 try
                 {
-                    
+                    int res = await _repCourse.modificar(course);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
