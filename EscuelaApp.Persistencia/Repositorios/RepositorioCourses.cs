@@ -13,16 +13,17 @@ namespace EscuelaApp.Persistencia.Repositorios
             _context = context;
         }
 
-        public Task<int> eliminar(int courseId)
+        public Task<int> eliminar(Course curso)
         {
-            throw new NotImplementedException();
+            _context.Courses.Remove(curso);
+            return _context.SaveChangesAsync();
         }
 
         public Task<int> insertar(Course curso)
         {
             _context.Add(curso);
             return _context.SaveChangesAsync();
-        } 
+        }
 
         public Task<int> modificar(Course curso)
         {

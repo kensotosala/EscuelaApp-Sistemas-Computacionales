@@ -8,6 +8,7 @@ namespace EscuelaApp.Persistencia
     {
         public static void ConfiguracionServicios (IServiceCollection servicios) {
             servicios.AddScoped<ICourses, RepositorioCourses>();
+            servicios.AddScoped<IDepartments, RepositorioDepartments>();
         }
     }
 }

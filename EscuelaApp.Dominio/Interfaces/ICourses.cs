@@ -11,7 +11,7 @@ namespace EscuelaApp.Dominio.Interfaces
         public Task<int> modificar(Course curso);
 
         // Eliminar
-        public Task<int> eliminar(int courseId);
+        public Task<int> eliminar(Course curso);
 
         // Listar
         public Task<List<Course>> obtenerTodo();

@@ -1,9 +1,7 @@
 ﻿using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
-using EscuelaApp.Persistencia.Repositorios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace EscuelaApp.Presentacion.Controllers
 {
@@ -11,11 +9,13 @@ namespace EscuelaApp.Presentacion.Controllers
     {
         private readonly SchoolDBContext _context;
         private readonly ICourses _repCourse;
+        private readonly IDepartments _repDepartment;
 
-        public CoursesController(SchoolDBContext context, ICourses repCourse)
+        public CoursesController(SchoolDBContext context, ICourses repCourse, IDepartments repDepartment)
         {
             _context = context;
             _repCourse = repCourse;
+            _repDepartment = repDepartment;
         }
 
         // GET: Courses
@@ -38,9 +38,9 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace EscuelaApp.Presentacion.Controllers
                 int res = await _repCourse.insertar(course);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
 
@@ -76,10 +76,9 @@ namespace EscuelaApp.Presentacion.Controllers
                 return NotFound(); // Handle case where course is not found
             }
 
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
-
 
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -95,24 +94,10 @@ namespace EscuelaApp.Presentacion.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    int res = await _repCourse.modificar(course);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CourseExists(course.CourseId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                int res = await _repCourse.modificar(course);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
 
@@ -124,9 +109,7 @@ namespace EscuelaApp.Presentacion.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .Include(c => c.Department)
-                .FirstOrDefaultAsync(m => m.CourseId == id);
+            var course = await _repCourse.obtenerCursosxId((int)id);
             if (course == null)
             {
                 return NotFound();
@@ -140,19 +123,14 @@ namespace EscuelaApp.Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _repCourse.obtenerCursosxId(id);
+
             if (course != null)
             {
-                _context.Courses.Remove(course);
+                int res = await _repCourse.eliminar(course);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CourseExists(int id)
-        {
-            return _context.Courses.Any(e => e.CourseId == id);
         }
     }
 }
