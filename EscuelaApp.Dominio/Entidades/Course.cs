@@ -16,7 +16,7 @@ public partial class Course
 
     public virtual OnsiteCourse? OnsiteCourse { get; set; }
 
-    public virtual ICollection<StudentGrade> StudentGrades { get; set; } = new List<StudentGrade>();
+    public virtual ICollection<StudentGrade>? StudentGrades { get; set; } = new List<StudentGrade>();
 
-    public virtual ICollection<Person> People { get; set; } = new List<Person>();
+    public virtual ICollection<Person>? People { get; set; } = new List<Person>();
 }

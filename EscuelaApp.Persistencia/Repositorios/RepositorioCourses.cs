@@ -21,17 +21,17 @@ namespace EscuelaApp.Persistencia.Repositorios
 
         public async Task<int> insertar(Course curso)
         {
-            var c = obtenerCursosxId(curso.CourseId);
-            if (curso == null)
-            {
+            //var c = obtenerCursosxId(curso.CourseId);
+            //if (curso == null)
+            //{
                 _context.Add(curso);
                 var res = _context.SaveChangesAsync();
                 return await res;
-            }
-            else
-            {
-                return await Task.FromResult(3);
-            }
+            //}
+            //else
+            //{
+            //    return await Task.FromResult(3);
+            //}
         }
 
         public Task<int> modificar(Course curso)

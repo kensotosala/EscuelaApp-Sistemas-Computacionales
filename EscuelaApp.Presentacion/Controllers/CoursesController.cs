@@ -21,12 +21,15 @@ namespace EscuelaApp.Presentacion.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
+            // TODO: Cambiar a utilizar API
+
             return View(await _repCourse.obtenerTodo());
         }
 
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int id)
         {
+            // TODO: CAMBIAR POR API
             var course = await _repCourse.obtenerCursosxId(id);
 
             if (course == null)
@@ -54,6 +57,7 @@ namespace EscuelaApp.Presentacion.Controllers
             int res = 0;
             if (ModelState.IsValid)
             {
+                // TODO: CAMBIAR  A API
                 res = await _repCourse.insertar(course);
 
                 if (res == 1)
