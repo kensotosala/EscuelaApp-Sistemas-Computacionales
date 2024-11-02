@@ -51,10 +51,30 @@ namespace EscuelaApp.Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CourseId,Title,Credits,DepartmentId")] Course course)
         {
+            int res = 0;
             if (ModelState.IsValid)
             {
-                int res = await _repCourse.insertar(course);
-                return RedirectToAction(nameof(Index));
+                res = await _repCourse.insertar(course);
+
+                if (res == 1)
+                {
+                    // TempData["Mensaje"] = "Curso Insertado Correctamente";
+                    ViewBag.Mensaje = "Curso Insertado Correctamente";
+                    ViewBag.TipoMsg = "alert-primary";
+                }
+                else if (res == 3)
+                {
+                    ViewBag.Mensaje = $"Error al insertar. Ya existe un curso con el ID: {course.CourseId}";
+                    ViewBag.TipoMsg = "alert-warning";
+                }
+                else
+                {
+                    // TempData["Mensaje"] = "Curso no ha sido guardado";
+                    ViewBag.Mensaje = "Curso no ha sido guardado";
+                    ViewBag.TipoMsg = "alert-danger";
+                }
+                // return RedirectToAction(nameof(Index));
+                return View("Index", await _repCourse.obtenerTodo());
             }
             ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
@@ -95,7 +115,20 @@ namespace EscuelaApp.Presentacion.Controllers
             if (ModelState.IsValid)
             {
                 int res = await _repCourse.modificar(course);
-                return RedirectToAction(nameof(Index));
+                if (res == 1)
+                {
+                    // TempData["Mensaje"] = "Curso Insertado Correctamente";
+                    ViewBag.Mensaje = "Curso Modificado Correctamente";
+                    ViewBag.TipoMsg = "alert-primary";
+                }
+                else
+                {
+                    // TempData["Mensaje"] = "Curso no ha sido guardado";
+                    ViewBag.Mensaje = "Curso no ha sido modificado";
+                    ViewBag.TipoMsg = "alert-danger";
+                }
+                // return RedirectToAction(nameof(Index));
+                return View("Index", await _repCourse.obtenerTodo());
             }
             ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
@@ -128,6 +161,20 @@ namespace EscuelaApp.Presentacion.Controllers
             if (course != null)
             {
                 int res = await _repCourse.eliminar(course);
+                if (res == 1)
+                {
+                    // TempData["Mensaje"] = "Curso Insertado Correctamente";
+                    ViewBag.Mensaje = "Curso eliminado correctamente";
+                    ViewBag.TipoMsg = "alert-primary";
+                }
+                else
+                {
+                    // TempData["Mensaje"] = "Curso no ha sido guardado";
+                    ViewBag.Mensaje = "Curso no ha sido eliminado";
+                    ViewBag.TipoMsg = "alert-danger";
+                }
+                // return RedirectToAction(nameof(Index));
+                return View("Index", await _repCourse.obtenerTodo());
             }
 
             return RedirectToAction(nameof(Index));

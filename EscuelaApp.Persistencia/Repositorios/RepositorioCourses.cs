@@ -19,14 +19,23 @@ namespace EscuelaApp.Persistencia.Repositorios
             return _context.SaveChangesAsync();
         }
 
-        public Task<int> insertar(Course curso)
+        public async Task<int> insertar(Course curso)
         {
-            _context.Add(curso);
-            return _context.SaveChangesAsync();
+            var c = obtenerCursosxId(curso.CourseId);
+            if (curso == null)
+            {
+                _context.Add(curso);
+                var res = _context.SaveChangesAsync();
+                return await res;
+            }
+            else
+            {
+                return await Task.FromResult(3);
+            }
         }
 
         public Task<int> modificar(Course curso)
-        {
+        { 
             _context.Update(curso);
             return _context.SaveChangesAsync();
         }

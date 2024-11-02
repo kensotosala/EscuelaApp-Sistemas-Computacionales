@@ -4,9 +4,13 @@
     ViewData["Title"] = "Cátalogo Cursos";
 }
 
-<div class="alert alert-primary" role="alert">
-    XXXX
-</div>
+@* Mensaje de Operación *@
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert @ViewBag.TipoMsg" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
 
 <h1>Index</h1>
 
