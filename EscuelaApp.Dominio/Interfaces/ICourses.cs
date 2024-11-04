@@ -18,5 +18,12 @@ namespace EscuelaApp.Dominio.Interfaces
 
         // Consultar x ID
         public Task<Course?> obtenerCursosxId(int courseId);
+
+        // Consultar x Nombre
+        public Task<Course?> obtenerCursosxNombre(String courseName);
+
+        public Task<int> getTotalCreditos();
+
+        public Task<Dictionary<string, int>> getTotalxDepartment();
     }
 }

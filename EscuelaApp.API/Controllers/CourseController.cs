@@ -58,5 +58,27 @@ namespace EscuelaApp.API.Controllers
         {
             return Ok(new { resultado = await _repCourse.eliminar(course) });
         }
+
+        // GET api/obtenerxId/{id}
+        [HttpGet]
+        [Route("ObtenerxNombre")]
+        public async Task<ActionResult> ObtenerxNombre(string courseName)
+        {
+            return Ok(new { resultado = await _repCourse.obtenerCursosxNombre(courseName) });
+        }
+
+        [HttpGet]
+        [Route("ObtenerTotalCreditos")]
+        public async Task<ActionResult> ObtenerTotalCreditos()
+        {
+            return Ok(new { resultado = await _repCourse.getTotalCreditos() });
+        }
+
+        [HttpGet]
+        [Route("ObtenerTotalxDepartment")]
+        public async Task<ActionResult> ObtenerTotalxDepartment()
+        {
+            return Ok(new { resultado = await _repCourse.getTotalxDepartment() });
+        }
     }
 }
