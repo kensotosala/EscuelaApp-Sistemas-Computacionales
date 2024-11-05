@@ -25,5 +25,7 @@ namespace EscuelaApp.Dominio.Interfaces
         public Task<int> getTotalCreditos();
 
         public Task<Dictionary<string, int>> getTotalxDepartment();
+
+        public Task<Double> obtenerPromedioCreditos();
     }
 }

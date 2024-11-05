@@ -1,6 +1,7 @@
 ﻿using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EscuelaApp.Persistencia.Repositorios
 {
@@ -79,6 +80,12 @@ namespace EscuelaApp.Persistencia.Repositorios
                 .ToListAsync();
 
             return result.ToDictionary(r => r.DepartmentName, r => r.TotalCreditos);
+        }
+
+        // Obtener el promedio de créditos de los cursos.
+        public Task<Double> obtenerPromedioCreditos()
+        {
+            return _context.Courses.AverageAsync(c => c.Credits);
         }
     }
 }

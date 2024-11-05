@@ -80,5 +80,13 @@ namespace EscuelaApp.API.Controllers
         {
             return Ok(new { resultado = await _repCourse.getTotalxDepartment() });
         }
+
+        // 4. Obtener el promedio de créditos de los cursos.
+        [HttpGet]
+        [Route("ObtenerPromedioCreditos")]
+        public async Task<ActionResult> ObtenerPromedioCreditos()
+        {
+            return Ok(new { resultado = await _repCourse.obtenerPromedioCreditos() });
+        }
     }
 }
