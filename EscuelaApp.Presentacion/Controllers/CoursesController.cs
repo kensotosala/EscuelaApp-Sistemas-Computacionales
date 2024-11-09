@@ -7,23 +7,38 @@ namespace EscuelaApp.Presentacion.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly SchoolDBContext _context;
         private readonly ICourses _repCourse;
         private readonly IDepartments _repDepartment;
+        private readonly HttpClient _httpCliente;
 
-        public CoursesController(SchoolDBContext context, ICourses repCourse, IDepartments repDepartment)
+        public CoursesController(ICourses repCourse, IDepartments repDepartment, HttpClient httpCliente)
         {
-            _context = context;
             _repCourse = repCourse;
             _repDepartment = repDepartment;
+            _httpCliente = httpCliente;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
             // TODO: Cambiar a utilizar API
+            string url = "http://localhost:5182/api/Course/ObtenerTodo";
 
-            return View(await _repCourse.obtenerTodo());
+            // Realizar la petición
+            HttpResponseMessage res = await _httpCliente.GetAsync(url);
+
+            // Validar que la petición es exitosa
+            if (res.IsSuccessStatusCode)
+            {
+                // Deserializar los datos
+                List<Course> cursos = await res.Content.ReadFromJsonAsync<List<Course>>();
+                return View(cursos);
+            }
+            else
+            {
+                StatusCode((int)res.StatusCode, "Error al obtener datos del curso");
+                return View();
+            }
         }
 
         // GET: Courses/Details/5

@@ -1,6 +1,8 @@
-﻿using EscuelaApp.Dominio.Interfaces;
+﻿using EscuelaApp.Dominio.DTO;
+using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,7 +25,19 @@ namespace EscuelaApp.API.Controllers
         public async Task<ActionResult> ObtenerTodo()
         {
             var res = await _repCourse.obtenerTodo();
-            return Ok(new { resultado = res });
+
+            var cursosDTO = res.Select(c => new CourseDTO
+            {
+                CourseID = c.CourseId,
+                Title = c.Title,
+                Credits = c.Credits,
+                DepartmentId = c.DepartmentId,
+            }).ToList();
+
+            var jsonRes = JsonConvert.SerializeObject(cursosDTO);
+            return Content(jsonRes, "application/json");
+
+            // return Ok(new { resultado = res });
         }
 
         // GET api/<CourseController>/5
@@ -48,6 +62,8 @@ namespace EscuelaApp.API.Controllers
         [Route("ActualizarCurso")]
         public async Task<ActionResult> ActualizarCurso(int id, [FromBody] Course course)
         {
+            var cursos = await _repCourse.modificar(course);
+
             return Ok(new { resultado = await _repCourse.modificar(course) });
         }
 

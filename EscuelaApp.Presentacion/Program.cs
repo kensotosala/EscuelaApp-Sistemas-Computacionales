@@ -7,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Llamar al método que inyecta nuestras dependencias
 InyectarDependencias.ConfiguracionServicios(builder.Services);
 
+// Inyectar httpclient
+builder.Services.AddHttpClient();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
