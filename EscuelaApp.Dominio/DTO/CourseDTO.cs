@@ -6,5 +6,6 @@
         public string Title { get; set; } = null!;
         public int Credits { get; set; }
         public int DepartmentId { get; set; }
+        public string? NombreDepartamento { get; set; }
     }
 }

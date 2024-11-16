@@ -32,6 +32,7 @@ namespace EscuelaApp.API.Controllers
                 Title = c.Title,
                 Credits = c.Credits,
                 DepartmentId = c.DepartmentId,
+                NombreDepartamento = c.Department?.Name
             }).ToList();
 
             var jsonRes = JsonConvert.SerializeObject(cursosDTO);

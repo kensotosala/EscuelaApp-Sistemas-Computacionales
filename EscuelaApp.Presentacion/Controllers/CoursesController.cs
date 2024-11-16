@@ -1,7 +1,10 @@
-﻿using EscuelaApp.Dominio.Interfaces;
+﻿using EscuelaApp.Dominio.DTO;
+using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace EscuelaApp.Presentacion.Controllers
 {
@@ -31,7 +34,7 @@ namespace EscuelaApp.Presentacion.Controllers
             if (res.IsSuccessStatusCode)
             {
                 // Deserializar los datos
-                List<Course> cursos = await res.Content.ReadFromJsonAsync<List<Course>>();
+                List<CourseDTO> cursos = await res.Content.ReadFromJsonAsync<List<CourseDTO>>();
                 return View(cursos);
             }
             else
@@ -72,8 +75,25 @@ namespace EscuelaApp.Presentacion.Controllers
             int res = 0;
             if (ModelState.IsValid)
             {
-                // TODO: CAMBIAR  A API
-                res = await _repCourse.insertar(course);
+                // TODO: Cambiar a utilizar API
+                string url = "http://localhost:5182/api/Course/GuardarCurso";
+
+                String jsonData = JsonConvert.SerializeObject(course);
+                HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // Realizar la petición
+                HttpResponseMessage response = await _httpCliente.PostAsync(url,content);
+
+                // Validar que la petición es exitosa
+                if (response.IsSuccessStatusCode)
+                {
+                    string resultdado = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    //StatusCode((int)res.StatusCode, "Error al obtener datos del curso");
+                    return View();
+                }
 
                 if (res == 1)
                 {

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<EscuelaApp.Persistencia.Data.Course>
+﻿@using EscuelaApp.Dominio.DTO
+@model IEnumerable<CourseDTO>
 
 @{
     ViewData["Title"] = "Cátalogo Cursos";
@@ -27,29 +28,30 @@
                 @Html.DisplayNameFor(model => model.Credits)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Department)
+                @Html.DisplayNameFor(model => model.NombreDepartamento)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credits)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CourseId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CourseId">Delete</a>
-            </td>
-        </tr>
+    @await Html.PartialAsync("_Fila", item)
+         @* <tr>
+             <td>
+                 @Html.DisplayFor(modelItem => item.Title)
+             </td>
+             <td>
+                 @Html.DisplayFor(modelItem => item.Credits)
+             </td>
+             <td>
+                 @Html.DisplayFor(modelItem => item.Department.Name)
+             </td>
+             <td>
+                 <a asp-action="Edit" asp-route-id="@item.CourseId">Edit</a> |
+                 <a asp-action="Details" asp-route-id="@item.CourseId">Details</a> |
+                 <a asp-action="Delete" asp-route-id="@item.CourseId">Delete</a>
+             </td>
+         </tr> *@
 }
     </tbody>
 </table>
