@@ -26,7 +26,15 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Cursos</a>
+                            @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "administrador")
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Cursos</a>
+                            }
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" asp-controller="Login" asp-action="Logout" class="nav-link text-dark" style="border: none; background: none; padding: 0;">
+                                <button type="submit" class="btn btn-link text-dark" style="text-decoration: none;">Logout</button>
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -35,6 +43,8 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <p>@ViewBag.Nombre</p>
+            <p>@ViewBag.Role</p>
             @RenderBody()
         </main>
     </div>

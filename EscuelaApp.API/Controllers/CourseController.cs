@@ -1,6 +1,7 @@
 ﻿using EscuelaApp.Dominio.DTO;
 using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -21,6 +22,7 @@ namespace EscuelaApp.API.Controllers
 
         // GET: api/obtenerTodo
         [HttpGet]
+        //[Authorize(Roles = "administrador")]
         [Route("ObtenerTodo")]
         public async Task<ActionResult> ObtenerTodo()
         {
@@ -37,12 +39,11 @@ namespace EscuelaApp.API.Controllers
 
             var jsonRes = JsonConvert.SerializeObject(cursosDTO);
             return Content(jsonRes, "application/json");
-
-            // return Ok(new { resultado = res });
         }
 
         // GET api/<CourseController>/5
         // GET api/obtenerxId/{id}
+        [Authorize(Roles = "administrador")]
         [HttpGet]
         [Route("ObtenerxId")]
         public async Task<ActionResult> ObtenerxId(int id)
@@ -51,6 +52,7 @@ namespace EscuelaApp.API.Controllers
         }
 
         // POST api/<CourseController>
+        //[Authorize(Roles = "administrador")]
         [HttpPost]
         [Route("GuardarCurso")]
         public async Task<ActionResult> GuardarCursoAsync([FromBody] Course course)
@@ -59,6 +61,7 @@ namespace EscuelaApp.API.Controllers
         }
 
         // PUT api/<CourseController>/5
+        [Authorize(Roles = "administrador")]
         [HttpPut]
         [Route("ActualizarCurso")]
         public async Task<ActionResult> ActualizarCurso(int id, [FromBody] Course course)
@@ -69,6 +72,7 @@ namespace EscuelaApp.API.Controllers
         }
 
         // DELETE api/<CourseController>/5
+        [Authorize(Roles = "administrador")]
         [HttpDelete]
         [Route("BorrarCurso")]
         public async Task<ActionResult> BorrarCurso([FromBody] Course course)
@@ -78,12 +82,14 @@ namespace EscuelaApp.API.Controllers
 
         // GET api/obtenerxId/{id}
         [HttpGet]
+        [Authorize(Roles = "administrador")]
         [Route("ObtenerxNombre")]
         public async Task<ActionResult> ObtenerxNombre(string courseName)
         {
             return Ok(new { resultado = await _repCourse.obtenerCursosxNombre(courseName) });
         }
 
+        [Authorize(Roles = "administrador")]
         [HttpGet]
         [Route("ObtenerTotalCreditos")]
         public async Task<ActionResult> ObtenerTotalCreditos()
@@ -91,6 +97,7 @@ namespace EscuelaApp.API.Controllers
             return Ok(new { resultado = await _repCourse.getTotalCreditos() });
         }
 
+        //[Authorize]
         [HttpGet]
         [Route("ObtenerTotalxDepartment")]
         public async Task<ActionResult> ObtenerTotalxDepartment()
@@ -99,6 +106,7 @@ namespace EscuelaApp.API.Controllers
         }
 
         // 4. Obtener el promedio de créditos de los cursos.
+        [Authorize(Roles = "administrador")]
         [HttpGet]
         [Route("ObtenerPromedioCreditos")]
         public async Task<ActionResult> ObtenerPromedioCreditos()

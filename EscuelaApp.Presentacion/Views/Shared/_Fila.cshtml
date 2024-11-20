@@ -2,9 +2,9 @@
 @model CourseDTO
 
 <tr>
-    <td>@Html.DisplayFor(modelItem => Model.Title)</td>
-    <td>@Html.DisplayFor(modelItem => Model.Credits)</td>
-    <td>@Html.DisplayFor(modelItem => Model.NombreDepartamento)</td>
+    <td>@Html.DisplayFor(model => model.Title)</td>   <!-- Display Title -->
+    <td>@Html.DisplayFor(model => model.Credits)</td>  <!-- Display Credits -->
+    <td>@Html.DisplayFor(model => model.NombreDepartamento)</td> <!-- Display Department Name -->
     <td>
         <a asp-action="Edit" asp-route-id="@Model.CourseID">Edit</a> |
         <a asp-action="Details" asp-route-id="@Model.CourseID">Details</a> |
