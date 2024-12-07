@@ -10,6 +10,7 @@
 </head>
 <body>
     <header>
+        @if (@ViewBag.Nombre != null) { 
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EscuelaApp.Presentacion</a>
@@ -40,11 +41,15 @@
                 </div>
             </div>
         </nav>
+        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <p>@ViewBag.Nombre</p>
+            @* <p>@ViewBag.Nombre</p> *@
+            <p>@User.Identity?.Name;</p>
             <p>@ViewBag.Role</p>
+            @* <img src="@ViewBag.ImagenUsuario" id="imgUser"/> *@
+            <img src="@User.FindFirst("ImagenUsuario")?.Value" id="imgUser" />
             @RenderBody()
         </main>
     </div>

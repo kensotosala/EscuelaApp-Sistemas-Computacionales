@@ -12,6 +12,7 @@ namespace EscuelaApp.Presentacion.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            ViewBag.Nombre = User.Identity?.Name;
             return View();
         }
 
@@ -34,6 +35,7 @@ namespace EscuelaApp.Presentacion.Controllers
                     new Claim(ClaimTypes.Name, hcFullName),
                     new Claim(ClaimTypes.NameIdentifier, hcUsername),
                     new Claim(ClaimTypes.Role, hcRole),
+                    new Claim("ImagenUsuario", "https://png.pngtree.com/png-vector/20221203/ourmid/pngtree-cartoon-style-female-user-profile-icon-vector-illustraton-png-image_6489286.png")
                 };
 
                 // Crear la identidad del claim

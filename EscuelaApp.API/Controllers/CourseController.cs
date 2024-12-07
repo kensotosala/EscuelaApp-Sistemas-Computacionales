@@ -22,7 +22,7 @@ namespace EscuelaApp.API.Controllers
 
         // GET: api/obtenerTodo
         [HttpGet]
-        //[Authorize(Roles = "administrador")]
+        [Authorize(Roles = "administrador")]
         [Route("ObtenerTodo")]
         public async Task<ActionResult> ObtenerTodo()
         {

@@ -20,6 +20,7 @@ namespace EscuelaApp.Presentacion.Controllers
         {
             ViewBag.Nombre = User.Identity?.Name;
             ViewBag.Role = User.FindFirst(ClaimTypes.Role)?.Value;
+            ViewBag.ImagenUsuario = User.FindFirst("ImagenUsuario")?.Value;
             return View();
         }
 
